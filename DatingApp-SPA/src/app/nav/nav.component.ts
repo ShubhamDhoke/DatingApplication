@@ -19,17 +19,18 @@ export class NavComponent implements OnInit {
   login() {
     this.authService.login(this.model).subscribe( next => {
         console.log('Logged in successfully');
-      }, error => { 
-        console.log('Login Failed');
+      // tslint:disable-next-line: no-shadowed-variable
+      }, error => {
+        console.log(error);
       });
   }
 
-  loggedIn(){
+  loggedIn() {
   const token = localStorage.getItem('token');
   return !!token;
   }
 
-  logout(){
+  logout() {
     localStorage.removeItem('token');
     console.log('Logged Out');
 
