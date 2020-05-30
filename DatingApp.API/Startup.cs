@@ -19,8 +19,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using DatingApp.API.Models.Data;
+using DatingApp.API.Models;
 using DatingApp.API.Data;
+using AutoMapper;
 
 namespace DatingApp.API
 {
@@ -37,8 +38,12 @@ namespace DatingApp.API
         public void ConfigureServices(IServiceCollection services)
         {   
             services.AddDbContext<DataContext>(x=>x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(opt =>{
+                opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
             services.AddCors();
+            services.AddAutoMapper(typeof(DatingRepository).Assembly);
+            services.AddScoped< IDatingRepository, DatingRepository>();
             services.AddScoped< IAuthRepository, AuthRepository>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
              .AddJwtBearer( options => {
@@ -97,6 +102,8 @@ namespace DatingApp.API
             app.UseRouting();
 
             app.UseCors(x =>x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
