@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace DatingApp.API.Dtos
 {
@@ -23,6 +24,7 @@ namespace DatingApp.API.Dtos
         public string Country { get; set; }
 
          public string PhotoURL { get; set; }
+
 
 
     }
